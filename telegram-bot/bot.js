@@ -9,6 +9,6 @@ bot.onText(/\/start/, (msg) => {
 
 bot.onText(/\/showapp/, (msg) => {
   const chatId = msg.chat.id;
-  const url = 'https://YOUR_NETLIFY_SITE_URL'; // Netlify üzerinde dağıttığınız React uygulamanızın URL'si
+  const url = 'https://66a88ad70e4c3a0008a20e40--techirrapp.netlify.app/'; // Netlify üzerinde dağıttığınız React uygulamanızın URL'si
   bot.sendMessage(chatId, `Here is the React app: ${url}`);
 });
