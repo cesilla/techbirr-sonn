@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useTonConnectUI, UserActionEvent, SdkActionEvent } from '@tonconnect/ui-react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
 
@@ -27,12 +27,11 @@ const WalletConnector = ({ onConnectWallet }) => {
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, []);
+  }, [languages.length]); // Burada languages.length'i bağımlılıklar arasına ekleyin
 
   useEffect(() => {
     const logEvent = (scope) => (event) => {
       scope = scope.startsWith('ton-connect-ui-') ? 'TonConnectUI' : 'TonConnect';
-  
       return (event) => {
         if (!(event instanceof CustomEvent)) {
           return;
@@ -41,7 +40,7 @@ const WalletConnector = ({ onConnectWallet }) => {
         console.log(`${scope} Event: ${detail.type}`, detail);
       };
     };
-  
+
     const tonConnectUiPrefix = 'ton-connect-ui-';
     const tonConnectUiEvents = [
       'request-version',
@@ -57,7 +56,7 @@ const WalletConnector = ({ onConnectWallet }) => {
       'transaction-signing-failed',
       'disconnection',
     ].map(event => `${tonConnectUiPrefix}${event}`);
-  
+
     const tonConnectPrefix = 'ton-connect-';
     const tonConnectEvents = [
       'request-version',
@@ -73,12 +72,12 @@ const WalletConnector = ({ onConnectWallet }) => {
       'transaction-signing-failed',
       'disconnection',
     ].map(event => `${tonConnectPrefix}${event}`);
-  
+
     const events = [
       ...tonConnectUiEvents,
       ...tonConnectEvents,
     ];
-  
+
     for (const event of events) {
       try {
         window.addEventListener(event, logEvent(event));
@@ -86,7 +85,7 @@ const WalletConnector = ({ onConnectWallet }) => {
         console.error('Failed to add event listener:', e);
       }
     }
-  
+
     return () => {
       for (const event of events) {
         try {
