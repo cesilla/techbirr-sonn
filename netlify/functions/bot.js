@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-const token = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8'; // BotFather'dan aldığınız token
+const token = process.env.TELEGRAM_TOKEN; // Çevresel değişken olarak token'ı kullanın
 const bot = new TelegramBot(token, {polling: true});
 
 bot.onText(/\/start/, (msg) => {
@@ -12,3 +12,10 @@ bot.onText(/\/showapp/, (msg) => {
   const url = 'https://66a88ad70e4c3a0008a20e40--techirrapp.netlify.app/'; // Netlify üzerinde dağıttığınız React uygulamanızın URL'si
   bot.sendMessage(chatId, `Here is the React app: ${url}`);
 });
+
+exports.handler = async function(event, context) {
+  return {
+    statusCode: 200,
+    body: 'Telegram bot is running!',
+  };
+};
