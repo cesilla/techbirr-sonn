@@ -2,10 +2,9 @@
   "name": "my-project",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd front2 && npm install && npm run build",
+    "build": "cd front2 && npm install && ESLINT_NO_DEV_ERRORS=true npm run build",
     "serve": "netlify dev",
-    "start-backend": "node netlify/functions/bot.js",
-    "start": "npm run build && concurrently \"npm run serve\" \"npm run start-backend\"",
+    "start": "npm run build && concurrently \"npm run serve\"",
     "package-functions": "webpack --config webpack.config.js"
   },
   "dependencies": {
