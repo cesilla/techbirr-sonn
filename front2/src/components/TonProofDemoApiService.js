@@ -1,4 +1,3 @@
-import { Account, ConnectAdditionalRequest, TonProofItemReplySuccess } from "@tonconnect/ui-react";
 
 class TonProofDemoApiService {
   constructor() {
