@@ -27,7 +27,7 @@ const WalletConnector = ({ onConnectWallet }) => {
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, [languages.length]); // Burada languages.length'i bağımlılıklar arasına ekleyin
+  }, [languages.length]);
 
   useEffect(() => {
     const logEvent = (scope) => (event) => {
