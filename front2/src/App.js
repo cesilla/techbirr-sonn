@@ -87,7 +87,7 @@ function App() {
         ]
       }}
       actionsConfiguration={{
-        twaReturnUrl: 'https://t.me/TechBirr_bot'
+        twaReturnUrl: 'https://t.me/TechBirr_app_bot'
       }}
     >
       <Router>
