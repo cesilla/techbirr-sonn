@@ -29,13 +29,15 @@ import './App.css';
 function App() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [languageSelected, setLanguageSelected] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const walletStatus = localStorage.getItem('walletConnected') === 'true';
-    const languageStatus = localStorage.getItem('selectedLanguage') !== null;
+    const language = localStorage.getItem('selectedLanguage');
     setWalletConnected(walletStatus);
-    setLanguageSelected(languageStatus);
+    setLanguageSelected(language !== null);
+    setSelectedLanguage(language || 'en');
 
     axios.get('http://localhost:3000/')
       .then(response => {
@@ -68,6 +70,7 @@ function App() {
 
   const handleLanguageSelection = (language) => {
     setLanguageSelected(true);
+    setSelectedLanguage(language);
     localStorage.setItem('selectedLanguage', language);
   };
 
@@ -80,7 +83,7 @@ function App() {
         <div className="App">
           {walletConnected && languageSelected && <NavBar />}
           <Routes>
-            <Route path="/wallet" element={<WalletConnector onConnectWallet={handleWalletConnection} />} />
+            <Route path="/wallet" element={<WalletConnector onConnectWallet={handleWalletConnection} selectedLanguage={selectedLanguage} />} />
             <Route path="/kayit" element={<Kayit onSelectLanguage={handleLanguageSelection} />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/prayer-times" element={<PrayerTimes />} />

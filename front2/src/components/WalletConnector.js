@@ -3,13 +3,22 @@ import { useTonConnectUI } from '@tonconnect/ui-react';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
 
-const WalletConnector = ({ onConnectWallet }) => {
+const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   const [wallet, setWallet] = useState(null);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState('');
-  const [currentLanguage, setCurrentLanguage] = useState(0);
+  const [currentLanguageIndex, setCurrentLanguageIndex] = useState(0);
 
-  const languages = ['Connect Wallet', 'Cüzdanı Bağla', 'Conectar Cartera', 'Connecter le Portefeuille', '接钱包', 'اتصل بالمحفظة'];
+  const languages = {
+    en: ['Connect Wallet'],
+    tr: ['Cüzdanı Bağla'],
+    es: ['Conectar Cartera'],
+    fr: ['Connecter le Portefeuille'],
+    zh: ['接钱包'],
+    ar: ['اتصل بالمحفظة'],
+    de: ['Verbinden Sie die Geldbörse'],
+    ru: ['Подключить кошелек'] // Added Russian language
+  };
 
   const [tonConnectUI] = useTonConnectUI();
 
@@ -23,11 +32,11 @@ const WalletConnector = ({ onConnectWallet }) => {
     }
 
     const languageInterval = setInterval(() => {
-      setCurrentLanguage((prev) => (prev + 1) % languages.length);
+      setCurrentLanguageIndex((prev) => (prev + 1) % (languages[selectedLanguage]?.length || languages['en'].length));
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, [languages.length]);
+  }, [languages, selectedLanguage]);
 
   const isMobile = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -98,7 +107,7 @@ const WalletConnector = ({ onConnectWallet }) => {
           </div>
         ) : (
           <button className="wallet-button slide-in-bottom" onClick={connectWallet}>
-            {languages[currentLanguage]}
+            {languages[selectedLanguage]?.[currentLanguageIndex] || languages['en'][currentLanguageIndex]}
           </button>
         )}
       </div>

@@ -42,17 +42,15 @@ const Kayit = ({ onSelectLanguage }) => {
   const handleLanguageSelect = (language) => {
     localStorage.setItem('selectedLanguage', language);
     onSelectLanguage(language);
-    navigate('/main', { state: { language } });
+    navigate('/wallet');
   };
 
-  const backgroundImage = window.innerWidth <= 768 ? '/kayit/Kayıtt.png' : '/kayit/Arkaplan.png';
-
   return (
-    <div className="container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="container">
       <img src="/kayit/logoo.png" alt="Logo" className="logo" />
       <div className="current-language">{currentLanguage}</div>
       <div className="language-container">
-        {languageKeys.slice(0, 7).map((key) => (
+        {languageKeys.map((key) => (
           <button
             key={key}
             className="language-button"
@@ -61,14 +59,6 @@ const Kayit = ({ onSelectLanguage }) => {
             <span className="language-text">{languages[key]}</span>
           </button>
         ))}
-      </div>
-      <div className="extra-language-button">
-        <button
-          className="language-button"
-          onClick={() => handleLanguageSelect(languageKeys[7])}
-        >
-          <span className="language-text">{languages[languageKeys[7]]}</span>
-        </button>
       </div>
     </div>
   );
