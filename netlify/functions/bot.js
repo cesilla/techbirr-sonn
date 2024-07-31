@@ -16,6 +16,15 @@ bot.start((ctx) => {
       one_time_keyboard: true // To hide the keyboard after use
     }
   });
+  exports.handler = async function(event, context) {
+    try {
+      await bot.handleUpdate(JSON.parse(event.body));
+      return { statusCode: 200, body: 'Update handled' };
+    } catch (err) {
+      console.error('Error handling update', err);
+      return { statusCode: 500, body: 'Internal Server Error' };
+    }
+  };
 });
 
 bot.launch();
