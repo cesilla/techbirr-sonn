@@ -88,18 +88,20 @@ const WalletConnector = ({ onConnectWallet }) => {
   };
 
   return (
-    <div className="wallet-connector">
-      {wallet ? (
-        <div className="wallet-info slide-in">
-          <p>Connected wallet address: {address}</p>
-          <p>Your balance: {balance}</p>
-          <button className="wallet-button" onClick={disconnectWallet}>Disconnect Wallet</button>
-        </div>
-      ) : (
-        <button className="wallet-button slide-in-bottom" onClick={connectWallet}>
-          {languages[currentLanguage]}
-        </button>
-      )}
+    <div className="wallet-connector-container">
+      <div className="wallet-connector">
+        {wallet ? (
+          <div className="wallet-info slide-in">
+            <p>Connected wallet address: {address}</p>
+            <p>Your balance: {balance}</p>
+            <button className="wallet-button" onClick={disconnectWallet}>Disconnect Wallet</button>
+          </div>
+        ) : (
+          <button className="wallet-button slide-in-bottom" onClick={connectWallet}>
+            {languages[currentLanguage]}
+          </button>
+        )}
+      </div>
     </div>
   );
 };
