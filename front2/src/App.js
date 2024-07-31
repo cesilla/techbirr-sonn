@@ -40,7 +40,7 @@ function App() {
         console.error('Network error:', error);
       });
 
-    const botToken = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8'; // Bot token'ınızı buraya ekleyin
+    const botToken = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8'; // Doğrudan kodda token tanımlayın
 
     const setWebhook = async () => {
       const url = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://main--lustrous-mousse-6b5222.netlify.app/`;
@@ -70,23 +70,6 @@ function App() {
     <TonConnectUIProvider
       manifestUrl="https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json"
       uiPreferences={{ theme: THEME.DARK }}
-      walletsListConfiguration={{
-        includeWallets: [
-          {
-            appName: "tonwallet",
-            name: "TON Wallet",
-            imageUrl: "https://wallet.ton.org/assets/ui/qr-logo.png",
-            aboutUrl: "https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd",
-            universalLink: "https://wallet.ton.org/ton-connect",
-            jsBridgeKey: "tonwallet",
-            bridgeUrl: "https://bridge.tonapi.io/bridge",
-            platforms: ["chrome", "android"]
-          }
-        ]
-      }}
-      actionsConfiguration={{
-        twaReturnUrl: 'https://t.me/TechBirr_bot'
-      }}
     >
       <Router>
         <div className="App">
