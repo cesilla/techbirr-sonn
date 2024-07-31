@@ -27,11 +27,16 @@ import SelectionPage2 from './components/SelectionPage21';
 import './App.css';
 
 function App() {
-  const [walletConnected, setWalletConnected] = useState(localStorage.getItem('walletConnected') === 'true');
-  const [languageSelected, setLanguageSelected] = useState(localStorage.getItem('selectedLanguage') !== null);
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [languageSelected, setLanguageSelected] = useState(false);
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    const walletStatus = localStorage.getItem('walletConnected') === 'true';
+    const languageStatus = localStorage.getItem('selectedLanguage') !== null;
+    setWalletConnected(walletStatus);
+    setLanguageSelected(languageStatus);
+
     axios.get('http://localhost:3000/')
       .then(response => {
         setData(response.data);
@@ -99,10 +104,10 @@ function App() {
             <Route
               path="/"
               element={
-                !languageSelected ? (
-                  <Navigate to="/kayit" />
-                ) : !walletConnected ? (
+                !walletConnected ? (
                   <Navigate to="/wallet" />
+                ) : !languageSelected ? (
+                  <Navigate to="/kayit" />
                 ) : (
                   <Navigate to="/main" />
                 )
