@@ -86,9 +86,7 @@ function App() {
       
         ]
       }}
-      actionsConfiguration={{
-        twaReturnUrl: 'https://t.me/TechBirr_app_bot'
-      }}
+    
     >
       <Router>
         <div className="App">
