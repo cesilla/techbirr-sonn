@@ -1,5 +1,5 @@
 const { Telegraf } = require('telegraf');
-const BOT_TOKEN = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8';
+const BOT_TOKEN = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M';
 const WEB_LINK = 'https://66a88ad70e4c3a0008a20e40--techirrapp.netlify.app/';
 
 const bot = new Telegraf(BOT_TOKEN);

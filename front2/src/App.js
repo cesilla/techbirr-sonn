@@ -40,7 +40,7 @@ function App() {
         console.error('Network error:', error);
       });
 
-    const botToken = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8'; // Doğrudan kodda token tanımlayın
+    const botToken = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M';
 
     const setWebhook = async () => {
       const url = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://main--lustrous-mousse-6b5222.netlify.app/`;
@@ -95,7 +95,7 @@ function App() {
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/selection" element={<SelectionPage />} />
             <Route path="/kibla" element={<KiblaPage />} />
-            <Route path="/selection21" element={<SelectionPage2 />} /> {/* Selection Page 2 route */}
+            <Route path="/selection21" element={<SelectionPage2 />} />
             <Route
               path="/"
               element={
