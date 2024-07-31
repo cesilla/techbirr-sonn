@@ -40,7 +40,7 @@ function App() {
         console.error('Network error:', error);
       });
 
-    const botToken = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8';
+    const botToken = '7400783507:AAGC4XhT0uWy3qniGfO-TmoFkkQ1-dSDeO8'; // Bot token'ınızı buraya ekleyin
 
     const setWebhook = async () => {
       const url = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://main--lustrous-mousse-6b5222.netlify.app/`;
@@ -81,12 +81,12 @@ function App() {
             jsBridgeKey: "tonwallet",
             bridgeUrl: "https://bridge.tonapi.io/bridge",
             platforms: ["chrome", "android"]
-          },
-        
-      
+          }
         ]
       }}
-    
+      actionsConfiguration={{
+        twaReturnUrl: 'https://t.me/TechBirr_bot'
+      }}
     >
       <Router>
         <div className="App">
