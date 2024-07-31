@@ -1,7 +1,6 @@
 [build]
-  base = "front2"
-  command = "npm install && npm run build"
-  publish = "build"
+  command = "cd front2 && npm install && npm run build"
+  publish = "front2/build"
   functions = "netlify/functions"
 
 [[redirects]]

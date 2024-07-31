@@ -5,9 +5,7 @@
     "build": "cd front2 && npm install && ESLINT_NO_DEV_ERRORS=true npm run build",
     "serve": "netlify dev",
     "start": "npm run build && concurrently \"npm run serve\"",
-    "package-functions": "webpack --config webpack.config.js",
-    "postinstall": "cd netlify/functions && npm install"
-
+    "package-functions": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
