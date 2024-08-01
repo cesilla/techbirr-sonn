@@ -1,10 +1,9 @@
 const { Telegraf } = require('telegraf');
-const BOT_TOKEN = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M';
-const WEB_LINK = 'https://techirrapp.netlify.app/';
+const BOT_TOKEN = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M'; // Doğrudan kodda token tanımlayın
+const WEB_LINK = 'https://techirrapp.netlify.app/'; // Web uygulamanızın URL'si
 
 const bot = new Telegraf(BOT_TOKEN);
 
-// Basit bir komut
 bot.start((ctx) => {
   ctx.reply('Welcome! Use the button below to open the web app.', {
     reply_markup: {
@@ -17,25 +16,14 @@ bot.start((ctx) => {
   });
 });
 
-// Netlify fonksiyonu
+bot.launch();
+
 exports.handler = async function(event, context) {
   try {
-    console.log('Event:', JSON.stringify(event, null, 2)); // Gelen isteği detaylı olarak loglayın
-
-    if (!event.body) {
-      console.error('Boş istek gövdesi');
-      return { statusCode: 400, body: 'Bad Request: Empty body' };
-    }
-
-    // İstek gövdesinin JSON formatında olduğundan emin olun
-    const update = JSON.parse(event.body);
-    console.log('Update:', update); // JSON parse edilen veriyi loglayın
-
-    await bot.handleUpdate(update);
-
+    await bot.handleUpdate(JSON.parse(event.body));
     return { statusCode: 200, body: 'Update handled' };
   } catch (err) {
-    console.error('Güncelleme işlenirken hata oluştu:', err);
+    console.error('Error handling update', err);
     return { statusCode: 500, body: 'Internal Server Error' };
   }
 };
