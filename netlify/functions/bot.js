@@ -5,6 +5,7 @@ const WEB_LINK = 'https://techirrapp.netlify.app/';
 
 const bot = new Telegraf(BOT_TOKEN);
 
+// Basit bir komut
 bot.start((ctx) => {
   ctx.reply('Welcome! Use the button below to open the web app.', {
     reply_markup: {
@@ -19,7 +20,7 @@ bot.start((ctx) => {
 
 exports.handler = async function(event, context) {
   try {
-    console.log('Gelen istek:', event.body);
+    console.log('Gelen istek:', event); // Daha fazla detay için tüm isteği loglayın
 
     if (!event.body) {
       console.error('Boş istek gövdesi');
@@ -29,13 +30,14 @@ exports.handler = async function(event, context) {
     let update;
     try {
       update = JSON.parse(event.body);
+      console.log('Update başarıyla çözüldü:', update);
     } catch (jsonError) {
       console.error('JSON parse hatası:', jsonError);
       return { statusCode: 400, body: 'Bad Request: Invalid JSON' };
     }
 
-    console.log('Update:', update);
     await bot.handleUpdate(update);
+    console.log('Update başarıyla işlendi.');
 
     return { statusCode: 200, body: 'Update handled' };
   } catch (err) {
