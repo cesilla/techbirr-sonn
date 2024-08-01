@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
@@ -9,7 +9,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   const [balance, setBalance] = useState('');
   const [currentLanguageIndex, setCurrentLanguageIndex] = useState(0);
 
-  const languages = {
+  const languages = useMemo(() => ({
     en: ['Connect Wallet'],
     tr: ['Cüzdanı Bağla'],
     es: ['Conectar Cartera'],
@@ -17,8 +17,8 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
     zh: ['接钱包'],
     ar: ['اتصل بالمحفظة'],
     de: ['Verbinden Sie die Geldbörse'],
-    ru: ['Подключить кошелек'] // Added Russian language
-  };
+    ru: ['Подключить кошелек']
+  }), []);
 
   const [tonConnectUI] = useTonConnectUI();
 
