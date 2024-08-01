@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TonConnectUIProvider, THEME } from "@tonconnect/ui-react";
 import WalletConnector from './components/WalletConnector';
@@ -63,66 +63,88 @@ function App() {
     setWebhook();
   }, []);
 
-  const handleWalletConnection = () => {
-    setWalletConnected(true);
-    localStorage.setItem('walletConnected', 'true');
-  };
-
-  const handleLanguageSelection = (language) => {
-    setLanguageSelected(true);
-    setSelectedLanguage(language);
-    localStorage.setItem('selectedLanguage', language);
-  };
-
   return (
     <TonConnectUIProvider
       manifestUrl="https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json"
       uiPreferences={{ theme: THEME.DARK }}
     >
       <Router>
-        <div className="App">
-          {walletConnected && languageSelected && <NavBar />}
-          <Routes>
-            <Route path="/wallet" element={<WalletConnector onConnectWallet={handleWalletConnection} selectedLanguage={selectedLanguage} />} />
-            <Route path="/kayit" element={<Kayit onSelectLanguage={handleLanguageSelection} />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/prayer-times" element={<PrayerTimes />} />
-            <Route path="/daily-prayers" element={<DailyPrayers />} />
-            <Route path="/hadiths" element={<Hadiths />} />
-            <Route path="/dhikr" element={<Dhikr />} />
-            <Route path="/names-of-allah" element={<NamesOfAllah />} />
-            <Route path="/quran-verses" element={<SurahList2 />} />
-            <Route path="/surah-translation/:surahNumber" element={<SurahTranslation />} />
-            <Route path="/sacrifice" element={<Sacrifice />} />
-            <Route path="/non-visualization" element={<NonVisualization />} />
-            <Route path="/dao" element={<DAO />} />
-            <Route path="/surah-original/:surahNumber" element={<SurahOriginal />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/todo-list" element={<ToDoList />} />
-            <Route path="/new-page" element={<NewPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/selection" element={<SelectionPage />} />
-            <Route path="/kibla" element={<KiblaPage />} />
-            <Route path="/selection21" element={<SelectionPage2 />} />
-            <Route
-              path="/"
-              element={
-                !languageSelected ? (
-                  <Navigate to="/kayit" />
-                ) : !walletConnected ? (
-                  <Navigate to="/wallet" />
-                ) : (
-                  <Navigate to="/main" />
-                )
-              }
-            />
-          </Routes>
-          <header className="App-header">
-            <p>{data}</p>
-          </header>
-        </div>
+        <AppWithRouter
+          walletConnected={walletConnected}
+          languageSelected={languageSelected}
+          selectedLanguage={selectedLanguage}
+          setWalletConnected={setWalletConnected}
+          setSelectedLanguage={setSelectedLanguage}
+          data={data}
+        />
       </Router>
     </TonConnectUIProvider>
+  );
+}
+
+function AppWithRouter({
+  walletConnected,
+  languageSelected,
+  selectedLanguage,
+  setWalletConnected,
+  setSelectedLanguage,
+  data
+}) {
+  const navigate = useNavigate();
+
+  const handleWalletConnection = () => {
+    setWalletConnected(true);
+    localStorage.setItem('walletConnected', 'true');
+    navigate('/main', { state: { language: selectedLanguage } }); // Dil bilgisi ile yönlendir
+  };
+
+  const handleLanguageSelection = (language) => {
+    setSelectedLanguage(language);
+    localStorage.setItem('selectedLanguage', language);
+  };
+
+  return (
+    <div className="App">
+      {walletConnected && languageSelected && <NavBar />}
+      <Routes>
+        <Route path="/wallet" element={<WalletConnector onConnectWallet={handleWalletConnection} selectedLanguage={selectedLanguage} />} />
+        <Route path="/kayit" element={<Kayit onSelectLanguage={handleLanguageSelection} />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/prayer-times" element={<PrayerTimes />} />
+        <Route path="/daily-prayers" element={<DailyPrayers />} />
+        <Route path="/hadiths" element={<Hadiths />} />
+        <Route path="/dhikr" element={<Dhikr />} />
+        <Route path="/names-of-allah" element={<NamesOfAllah />} />
+        <Route path="/quran-verses" element={<SurahList2 />} />
+        <Route path="/surah-translation/:surahNumber" element={<SurahTranslation />} />
+        <Route path="/sacrifice" element={<Sacrifice />} />
+        <Route path="/non-visualization" element={<NonVisualization />} />
+        <Route path="/dao" element={<DAO />} />
+        <Route path="/surah-original/:surahNumber" element={<SurahOriginal />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/todo-list" element={<ToDoList />} />
+        <Route path="/new-page" element={<NewPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/selection" element={<SelectionPage />} />
+        <Route path="/kibla" element={<KiblaPage />} />
+        <Route path="/selection21" element={<SelectionPage2 />} />
+        <Route
+          path="/"
+          element={
+            !languageSelected ? (
+              <Navigate to="/kayit" />
+            ) : !walletConnected ? (
+              <Navigate to="/wallet" />
+            ) : (
+              <Navigate to="/main" />
+            )
+          }
+        />
+      </Routes>
+      <header className="App-header">
+        <p>{data}</p>
+      </header>
+    </div>
   );
 }
 

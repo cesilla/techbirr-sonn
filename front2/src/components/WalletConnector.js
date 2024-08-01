@@ -44,7 +44,10 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
 
   const connectWallet = async () => {
     try {
+      console.log('Attempting to connect to the wallet...');
+
       if (tonConnectUI.connected) {
+        console.log('Wallet is already connected.');
         return;
       }
 
@@ -52,9 +55,14 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
         universalLink: isMobile() ? undefined : 'https://tonkeeper.app',
       });
 
+      console.log('Wallet connection result:', connectResult);
+
       const walletState = connectResult.wallet;
       const walletAddress = walletState.account.address;
+      console.log('Connected wallet address:', walletAddress);
+
       const balance = await fetchBalance(walletAddress);
+      console.log('Fetched balance:', balance);
 
       const walletData = {
         account: { address: walletAddress },
@@ -69,6 +77,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
       onConnectWallet(walletData);
 
       if (connectResult.tonProof) {
+        console.log('Checking Ton Proof...');
         await TonProofDemoApi.checkProof(connectResult.tonProof.proof, connectResult.account);
       }
     } catch (error) {
@@ -77,6 +86,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   };
 
   const disconnectWallet = () => {
+    console.log('Disconnecting wallet...');
     tonConnectUI.disconnect();
     setWallet(null);
     setAddress('');
@@ -87,8 +97,10 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
 
   const fetchBalance = async (address) => {
     try {
+      console.log('Fetching balance for address:', address);
       const response = await fetch(`https://tonapi.io/v1/account/getInfo?account=${address}`);
       const data = await response.json();
+      console.log('Balance fetched:', data.balance);
       return data.balance;
     } catch (error) {
       console.error('Failed to fetch balance:', error);
