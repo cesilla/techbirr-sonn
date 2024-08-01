@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTonConnectUI } from '@tonconnect/ui-react';
-import { useNavigate } from 'react-router-dom'; // useNavigate import edin
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
 
@@ -9,8 +8,6 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState('');
   const [currentLanguageIndex, setCurrentLanguageIndex] = useState(0);
-
-  const navigate = useNavigate(); // useNavigate hook'u kullanarak navigate fonksiyonunu alın
 
   const languages = useMemo(() => ({
     en: ['Connect Wallet'],
@@ -74,9 +71,6 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
       if (connectResult.tonProof) {
         await TonProofDemoApi.checkProof(connectResult.tonProof.proof, connectResult.account);
       }
-
-      navigate('/main'); // Cüzdana bağlanır bağlanmaz MainPage'e yönlendir
-
     } catch (error) {
       console.error('Ton Wallet connection failed:', error);
     }
