@@ -1,6 +1,6 @@
 const { Telegraf } = require('telegraf');
 const BOT_TOKEN = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M'; // Doğrudan kodda token tanımlayın
-const WEB_LINK = 'https://techirrapp.netlify.app/'; // Web uygulamanızın URL'si
+const WEB_LINK = 'https://66ab2fa429d0439148525d4d--techirrapp.netlify.app/'; // Web uygulamanızın URL'si
 
 const bot = new Telegraf(BOT_TOKEN);
 

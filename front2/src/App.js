@@ -107,10 +107,10 @@ function App() {
             <Route
               path="/"
               element={
-                !walletConnected ? (
-                  <Navigate to="/wallet" />
-                ) : !languageSelected ? (
+                !languageSelected ? (
                   <Navigate to="/kayit" />
+                ) : !walletConnected ? (
+                  <Navigate to="/wallet" />
                 ) : (
                   <Navigate to="/main" />
                 )
