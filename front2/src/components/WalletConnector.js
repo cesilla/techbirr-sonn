@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import { Link, useNavigate } from 'react-router-dom';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
@@ -26,6 +26,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   );
 
   const [tonConnectUI] = useTonConnectUI();
+  const tonWallet = useTonWallet();
 
   useEffect(() => {
     const storedWallet = localStorage.getItem('wallet');
@@ -34,7 +35,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
       setWallet(walletData);
       setAddress(walletData.account.address);
       setBalance(walletData.balance);
-      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
+      onConnectWallet(walletData);
     }
 
     const languageInterval = setInterval(() => {
@@ -42,14 +43,21 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, [languages, selectedLanguage, navigate]);
+  }, [languages, selectedLanguage, onConnectWallet]);
+
+  useEffect(() => {
+    if (tonWallet) {
+      console.log('Wallet is already connected.');
+      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
+    }
+  }, [tonWallet, navigate]);
 
   const isMobile = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
   const connectWallet = async () => {
-    if (wallet) {
+    if (tonWallet) {
       console.log('Wallet is already connected.');
       navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
       return;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { TonConnectUIProvider, THEME, useTonAddress } from "@tonconnect/ui-react";
+import { TonConnectUIProvider, THEME, useTonAddress, useTonWallet } from "@tonconnect/ui-react";
 import WalletConnector from './components/WalletConnector';
 import Kayit from './components/Kayit';
 import MainPage from './components/MainPage';
