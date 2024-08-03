@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { TonConnectUIProvider, THEME, useTonAddress, useTonWallet } from "@tonconnect/ui-react";
+import { TonConnectUIProvider, THEME, useTonAddress } from "@tonconnect/ui-react";
+// 'useTonWallet' import edilmemiş
 import WalletConnector from './components/WalletConnector';
 import Kayit from './components/Kayit';
 import MainPage from './components/MainPage';
@@ -9,7 +10,7 @@ import PrayerTimes from './components/PrayerTimes';
 import DailyPrayers from './components/DailyPrayers';
 import Hadiths from './components/Hadiths';
 import Dhikr from './components/Dhikr';
-import NamesOfAllah from './components/AllahIsimleri';
+import NamesOfAllah from './components/NamesOfAllah';
 import Sacrifice from './components/Sacrifice';
 import NonVisualization from './components/NonVisualization';
 import DAO from './components/DAO';
@@ -23,7 +24,7 @@ import NewPage from './components/NewPage';
 import CalendarPage from './components/Calendar';
 import SelectionPage from './components/SelectionPage';
 import KiblaPage from './components/KiblaPage';
-import SelectionPage2 from './components/SelectionPage21';
+import SelectionPage2 from './components/SelectionPage2';
 import './App.css';
 
 function App() {
