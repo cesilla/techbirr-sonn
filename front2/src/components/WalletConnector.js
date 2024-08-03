@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 import { Link, useNavigate } from 'react-router-dom';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
@@ -26,7 +26,6 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   );
 
   const [tonConnectUI] = useTonConnectUI();
-  const tonWallet = useTonWallet();
 
   useEffect(() => {
     const storedWallet = localStorage.getItem('wallet');
@@ -35,7 +34,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
       setWallet(walletData);
       setAddress(walletData.account.address);
       setBalance(walletData.balance);
-      onConnectWallet(walletData);
+      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
     }
 
     const languageInterval = setInterval(() => {
@@ -43,21 +42,14 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, [languages, selectedLanguage, onConnectWallet]);
-
-  useEffect(() => {
-    if (tonWallet) {
-      console.log('Wallet is already connected.');
-      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
-    }
-  }, [tonWallet, navigate]);
+  }, [languages, selectedLanguage, navigate]);
 
   const isMobile = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
   const connectWallet = async () => {
-    if (tonWallet) {
+    if (wallet) {
       console.log('Wallet is already connected.');
       navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
       return;
@@ -100,7 +92,14 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
         navigate('/main'); // Bağlantı başarılıysa MainPage'e yönlendir
       }
     } catch (error) {
-      console.error('Ton Wallet connection failed:', error);
+      if (error.message === 'WalletAlreadyConnectedError') {
+        console.log('Wallet is already connected.');
+        navigate('/main');
+      } else if (error.message === 'TonConnectError: Operation aborted') {
+        console.log('Ton Wallet connection aborted.');
+      } else {
+        console.error('Ton Wallet connection failed:', error);
+      }
     }
   };
 

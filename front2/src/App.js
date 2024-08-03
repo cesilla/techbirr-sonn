@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TonConnectUIProvider, THEME, useTonAddress } from "@tonconnect/ui-react";
-// 'useTonWallet' import edilmemiş
 import WalletConnector from './components/WalletConnector';
 import Kayit from './components/Kayit';
 import MainPage from './components/MainPage';
@@ -24,7 +23,7 @@ import NewPage from './components/NewPage';
 import CalendarPage from './components/Calendar';
 import SelectionPage from './components/SelectionPage';
 import KiblaPage from './components/KiblaPage';
-import SelectionPage2 from './components/SelectionPage2';
+import SelectionPage2 from './components/SelectionPage21';
 import './App.css';
 
 function App() {
