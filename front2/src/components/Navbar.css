@@ -46,73 +46,103 @@
 }
 
 /* Individual icon sizes */
-.navbar .kible img,
-.navbar .quran img,
-.navbar .allah img,
-.navbar .calendar img {
+.navbar .kible,
+.navbar .quran,
+.navbar .allah,
+.navbar .calendar {
   width: 40px; /* Size for all icons except center */
   height: 40px;
-  position: absolute; /* Positioning */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center */
+  position: relative; /* Changed to relative positioning */
+  transform: translateY(0); /* Reset transform */
   transition: transform 0.3s; /* Transition for smooth hover effect */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.navbar .kible {
+  background-image: url('/public/icons/kible.png');
+}
+
+.navbar .quran {
+  background-image: url('/public/icons/kuran.png');
+}
+
+.navbar .allah {
+  background-image: url('/public/icons/allah.png');
+}
+
+.navbar .calendar {
+  background-image: url('/public/icons/takvim.png');
 }
 
 .navbar .center {
-  position: relative;
-  top: -20px; /* Lift the center icon */
-  flex: 0 0 auto; /* Make center icon non-flexible to center it */
-width: 100px;}
+  position: absolute; /* Changed to absolute positioning */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  top: -30px; /* Lift the center icon */
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .navbar .center-icon {
   width: 60px; /* Larger size for the center icon */
   height: 60px;
   border-radius: 50%;
   padding: 10px; /* Padding to make the icon look centered within the background */
-  position: absolute; /* Positioning */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Center */
+  background-image: url('/public/icons/zikir.png');
+  background-size: contain;
+  background-repeat: no-repeat;
   transition: transform 0.3s; /* Transition for smooth hover effect */
 }
 
-/* Optional: Adjust font size if you have text below icons */
+/* Move the Allah icon to the left */
+.navbar .allah {
+  left: calc(50% - 100px);
+}
+
 .navbar li a span {
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Hover effects */
-.navbar li:hover img {
-  transform: translate(-50%, -50%) scale(1.2); /* Enlarge the icon on hover */
+.navbar li:hover .kible,
+.navbar li:hover .quran,
+.navbar li:hover .allah,
+.navbar li:hover .calendar,
+.navbar .center:hover .center-icon {
+  transform: scale(1.2); /* Enlarge the icon on hover */
 }
 
-/* Media queries for mobile devices */
 @media (max-width: 600px) {
   .navbar nav {
     height: 60px; /* Reduce height for mobile */
   }
 
-  .navbar .kible img,
-  .navbar .quran img,
-  .navbar .allah img,
-  .navbar .calendar img {
+  .navbar .kible,
+  .navbar .quran,
+  .navbar .allah,
+  .navbar .calendar {
     width: 30px; /* Smaller size for mobile */
     height: 30px;
   }
 
   .navbar .center-icon {
-    width: 100px; /* Smaller size for mobile */
-    height: 100px;
+    width: 40px; /* Smaller size for mobile */
+    height: 40px;
   }
 
   .navbar li a span {
     font-size: 10px; /* Smaller font size for mobile */
   }
 
-  /* Hover effects for mobile devices */
-  .navbar li:hover img {
-    transform: translate(-50%, -50%) scale(1.2); /* Enlarge the icon on hover */
+  .navbar li:hover .kible,
+  .navbar li:hover .quran,
+  .navbar li:hover .allah,
+  .navbar li:hover .calendar,
+  .navbar .center:hover .center-icon {
+    transform: scale(1.2); /* Enlarge the icon on hover */
   }
 }

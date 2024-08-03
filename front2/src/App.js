@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { TonConnectUIProvider, THEME } from "@tonconnect/ui-react";
+import { TonConnectUIProvider, THEME, useTonAddress } from "@tonconnect/ui-react";
 import WalletConnector from './components/WalletConnector';
 import Kayit from './components/Kayit';
 import MainPage from './components/MainPage';
@@ -31,6 +31,8 @@ function App() {
   const [languageSelected, setLanguageSelected] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [data, setData] = useState(null);
+  const tonAddress = useTonAddress();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const walletStatus = localStorage.getItem('walletConnected') === 'true';
@@ -39,6 +41,7 @@ function App() {
     setLanguageSelected(language !== null);
     setSelectedLanguage(language || 'en');
 
+    // Sunucudan veri çekme
     axios.get('http://localhost:3000/')
       .then(response => {
         setData(response.data);
@@ -47,68 +50,55 @@ function App() {
         console.error('Network error:', error);
       });
 
-    const botToken = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M';
-
+    // Telegram webhook ayarı
+    const botToken = '7309348405:AAEJmW2iw5zLkbhuEFg0kMlQIxyFpcEaZ0M'; // Gerçek bot token
     const setWebhook = async () => {
-      const url = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://main--lustrous-mousse-6b5222.netlify.app/`;
+      const url = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://main--lustrous-mousse-6b5222.netlify.app/`; // Gerçek uygulama URL'i
       try {
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
       } catch (error) {
-        console.error('Error setting webhook:', error);
+        console.error('Webhook ayarlama hatası:', error);
       }
     };
 
     setWebhook();
   }, []);
 
-  return (
-    <TonConnectUIProvider
-      manifestUrl="https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json"
-      uiPreferences={{ theme: THEME.DARK }}
-    >
-      <Router>
-        <AppWithRouter
-          walletConnected={walletConnected}
-          languageSelected={languageSelected}
-          selectedLanguage={selectedLanguage}
-          setWalletConnected={setWalletConnected}
-          setSelectedLanguage={setSelectedLanguage}
-          data={data}
-        />
-      </Router>
-    </TonConnectUIProvider>
-  );
-}
+  useEffect(() => {
+    const targetUrl = window.location.pathname + window.location.search;
+    if (!tonAddress && window.location.pathname !== '/wallet' && window.location.pathname !== '/kayit') {
+      navigate(`/wallet?${targetUrl}`);
+    }
+  }, [tonAddress, navigate]);
 
-function AppWithRouter({
-  walletConnected,
-  languageSelected,
-  selectedLanguage,
-  setWalletConnected,
-  setSelectedLanguage,
-  data
-}) {
-  const navigate = useNavigate();
-
-  const handleWalletConnection = () => {
+  const handleWalletConnection = (walletData) => {
     setWalletConnected(true);
     localStorage.setItem('walletConnected', 'true');
-    navigate('/main', { state: { language: selectedLanguage } }); // Dil bilgisi ile yönlendir
+    navigate('/main', { state: { language: selectedLanguage } });
   };
 
   const handleLanguageSelection = (language) => {
     setSelectedLanguage(language);
     localStorage.setItem('selectedLanguage', language);
+    navigate('/wallet');
   };
 
-  return (
-    <div className="App">
-      {walletConnected && languageSelected && <NavBar />}
+  if (!walletConnected || !languageSelected) {
+    return (
       <Routes>
         <Route path="/wallet" element={<WalletConnector onConnectWallet={handleWalletConnection} selectedLanguage={selectedLanguage} />} />
         <Route path="/kayit" element={<Kayit onSelectLanguage={handleLanguageSelection} />} />
+        <Route path="*" element={<Navigate to={languageSelected ? '/wallet' : '/kayit'} />} />
+      </Routes>
+    );
+  }
+
+  return (
+    <div className="App">
+      <NavBar />
+      <Routes>
         <Route path="/main" element={<MainPage />} />
         <Route path="/prayer-times" element={<PrayerTimes />} />
         <Route path="/daily-prayers" element={<DailyPrayers />} />
@@ -128,18 +118,7 @@ function AppWithRouter({
         <Route path="/selection" element={<SelectionPage />} />
         <Route path="/kibla" element={<KiblaPage />} />
         <Route path="/selection21" element={<SelectionPage2 />} />
-        <Route
-          path="/"
-          element={
-            !languageSelected ? (
-              <Navigate to="/kayit" />
-            ) : !walletConnected ? (
-              <Navigate to="/wallet" />
-            ) : (
-              <Navigate to="/main" />
-            )
-          }
-        />
+        <Route path="*" element={<Navigate to="/main" />} />
       </Routes>
       <header className="App-header">
         <p>{data}</p>
@@ -148,4 +127,17 @@ function AppWithRouter({
   );
 }
 
-export default App;
+function RootApp() {
+  return (
+    <TonConnectUIProvider
+      manifestUrl="https://ton-connect.github.io/demo-dapp-with-wallet/tonconnect-manifest.json"
+      uiPreferences={{ theme: THEME.DARK }}
+    >
+      <Router>
+        <App />
+      </Router>
+    </TonConnectUIProvider>
+  );
+}
+
+export default RootApp;

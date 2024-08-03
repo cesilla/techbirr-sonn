@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTonConnectUI } from '@tonconnect/ui-react';
+import { Link, useNavigate } from 'react-router-dom';
 import './WalletConnector.css';
 import { TonProofDemoApi } from './TonProofDemoApiService';
 
@@ -8,17 +9,21 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState('');
   const [currentLanguageIndex, setCurrentLanguageIndex] = useState(0);
+  const navigate = useNavigate();
 
-  const languages = useMemo(() => ({
-    en: ['Connect Wallet'],
-    tr: ['Cüzdanı Bağla'],
-    es: ['Conectar Cartera'],
-    fr: ['Connecter le Portefeuille'],
-    zh: ['接钱包'],
-    ar: ['اتصل بالمحفظة'],
-    de: ['Verbinden Sie die Geldbörse'],
-    ru: ['Подключить кошелек']
-  }), []);
+  const languages = useMemo(
+    () => ({
+      en: ['Connect Wallet'],
+      tr: ['Cüzdanı Bağla'],
+      es: ['Conectar Cartera'],
+      fr: ['Connecter le Portefeuille'],
+      zh: ['接钱包'],
+      ar: ['اتصل بالمحفظة'],
+      de: ['Verbinden Sie die Geldbörse'],
+      ru: ['Подключить кошелек'],
+    }),
+    []
+  );
 
   const [tonConnectUI] = useTonConnectUI();
 
@@ -29,6 +34,7 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
       setWallet(walletData);
       setAddress(walletData.account.address);
       setBalance(walletData.balance);
+      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
     }
 
     const languageInterval = setInterval(() => {
@@ -36,49 +42,54 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
     }, 3000);
 
     return () => clearInterval(languageInterval);
-  }, [languages, selectedLanguage]);
+  }, [languages, selectedLanguage, navigate]);
 
   const isMobile = () => {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   };
 
   const connectWallet = async () => {
+    if (wallet) {
+      console.log('Wallet is already connected.');
+      navigate('/main'); // Cüzdan zaten bağlıysa MainPage'e yönlendir
+      return;
+    }
+
+    console.log('Attempting to connect to the wallet...');
+
     try {
-      console.log('Attempting to connect to the wallet...');
-
-      if (tonConnectUI.connected) {
-        console.log('Wallet is already connected.');
-        return;
-      }
-
       const connectResult = await tonConnectUI.connectWallet({
         universalLink: isMobile() ? undefined : 'https://tonkeeper.app',
       });
 
       console.log('Wallet connection result:', connectResult);
 
-      const walletState = connectResult.wallet;
-      const walletAddress = walletState.account.address;
-      console.log('Connected wallet address:', walletAddress);
+      if (connectResult.wallet) {
+        const walletState = connectResult.wallet;
+        const walletAddress = walletState.account.address;
+        console.log('Connected wallet address:', walletAddress);
 
-      const balance = await fetchBalance(walletAddress);
-      console.log('Fetched balance:', balance);
+        const balance = await fetchBalance(walletAddress);
+        console.log('Fetched balance:', balance);
 
-      const walletData = {
-        account: { address: walletAddress },
-        balance,
-      };
+        const walletData = {
+          account: { address: walletAddress },
+          balance,
+        };
 
-      setWallet(walletData);
-      setAddress(walletAddress);
-      setBalance(balance);
+        setWallet(walletData);
+        setAddress(walletAddress);
+        setBalance(balance);
 
-      localStorage.setItem('wallet', JSON.stringify(walletData));
-      onConnectWallet(walletData);
+        localStorage.setItem('wallet', JSON.stringify(walletData));
+        onConnectWallet(walletData);
 
-      if (connectResult.tonProof) {
-        console.log('Checking Ton Proof...');
-        await TonProofDemoApi.checkProof(connectResult.tonProof.proof, connectResult.account);
+        if (connectResult.tonProof) {
+          console.log('Checking Ton Proof...');
+          await TonProofDemoApi.checkProof(connectResult.tonProof.proof, connectResult.account);
+        }
+
+        navigate('/main'); // Bağlantı başarılıysa MainPage'e yönlendir
       }
     } catch (error) {
       console.error('Ton Wallet connection failed:', error);
@@ -115,7 +126,10 @@ const WalletConnector = ({ onConnectWallet, selectedLanguage }) => {
           <div className="wallet-info slide-in">
             <p>Connected wallet address: {address}</p>
             <p>Your balance: {balance}</p>
-            <button className="wallet-button" onClick={disconnectWallet}>Disconnect Wallet</button>
+            <button className="wallet-button" onClick={disconnectWallet}>
+              Disconnect Wallet
+            </button>
+            <Link to="/main" className="auto-redirect-link" />
           </div>
         ) : (
           <button className="wallet-button slide-in-bottom" onClick={connectWallet}>
